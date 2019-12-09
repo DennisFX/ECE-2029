@@ -1,0 +1,52 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 12/09/2019 04:34:50 PM
+// Design Name: 
+// Module Name: Subtraction_Module
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module Subtraction_Module(
+    input [4:0] num1,
+    input [4:0] num2,
+    output [7:0] result
+    );
+    
+wire [4:0] diff = num1 - num2;
+reg [7:0] conversion;
+
+always@(conversion, num1, num2)
+    begin
+    
+    if(num2 > num1)
+        conversion[0] = 1'b1;
+    else
+        conversion[0] = 1'b0;
+        
+    conversion[1] = 1'b0;
+    conversion[2] = 1'b0;
+    
+    conversion[3] = diff[0];
+    conversion[4] = diff[1];
+    conversion[5] = diff[2];
+    conversion[6] = diff[3];
+    conversion[7] = diff[4];
+        
+    end
+    
+    assign result = conversion;
+endmodule
