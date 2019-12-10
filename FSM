@@ -1,0 +1,106 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 12/09/2019 07:24:26 PM
+// Design Name: 
+// Module Name: Select_Operation
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module Select_Operation(
+    input clk,
+    input a_btn,
+    input b_btn,
+    input c_btn,
+    input d_btn,
+    output [1:0] operator
+    );
+    localparam ADD = 0, SUB = 1, MUL = 2, DIV = 3;
+    reg [1:0] current_state = 0; // Current State
+    reg [1:0] next_state = 0; // Next State
+    reg [1:0] set_state;
+    
+    always @(posedge clk) begin
+        current_state <= next_state;
+    end
+    
+    always @(current_state, a_btn, b_btn, c_btn, d_btn) begin
+    begin
+    case(current_state)
+    ADD: begin
+    if(b_btn)
+    next_state = SUB;
+    else if(c_btn)
+    next_state = MUL;
+    else if(d_btn)
+    next_state = DIV;
+    end
+    SUB: begin
+    if(a_btn)
+    next_state = ADD;
+    else if(c_btn)
+    next_state = MUL;
+    else if(d_btn)
+    next_state = DIV;
+    end
+    MUL: begin
+    if(a_btn)
+    next_state = ADD;
+    else if(b_btn)
+    next_state = SUB;
+    else if(d_btn)
+    next_state = DIV;
+    end
+    DIV: begin
+    if(a_btn)
+    next_state = ADD;
+    else if(b_btn)
+    next_state = SUB;
+    else if(c_btn)
+    next_state = MUL;
+    end
+    
+    default:begin
+     next_state = ADD;
+    end
+    
+    endcase
+    end
+    end
+    
+    always@(current_state)begin
+    case(current_state)
+    ADD:begin
+    set_state = {2'b00};
+    end
+    SUB:begin
+    set_state = {2'b01};
+    end
+    MUL:begin
+    set_state = {2'b10};
+    end
+    DIV:begin
+    set_state = {2'b11};
+    end
+    default:begin
+    set_state = {2'b00};
+    end
+    endcase
+    end
+    
+    assign operator = set_state;
+    
+endmodule
